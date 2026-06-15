@@ -399,6 +399,10 @@ func (c *Config) GetTLSConfig(opts ...Option) *tls.Config {
 	} else {
 		randCarrier.PinnedPeerCertSha256 = nil
 	}
+	if c.AllowInsecure {
+		config.InsecureSkipVerify = true
+		config.VerifyPeerCertificate = nil
+	}
 
 	for _, opt := range opts {
 		opt(config)

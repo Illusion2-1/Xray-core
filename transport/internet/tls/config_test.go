@@ -73,6 +73,20 @@ func TestInsecureCertificates(t *testing.T) {
 	}
 }
 
+func TestAllowInsecureSkipsCertificateVerification(t *testing.T) {
+	c := &Config{
+		AllowInsecure: true,
+	}
+
+	tlsConfig := c.GetTLSConfig()
+	if !tlsConfig.InsecureSkipVerify {
+		t.Fatal("AllowInsecure should enable InsecureSkipVerify")
+	}
+	if tlsConfig.VerifyPeerCertificate != nil {
+		t.Fatal("AllowInsecure should not keep custom peer certificate verification")
+	}
+}
+
 func BenchmarkCertificateIssuing(b *testing.B) {
 	ct, _ := cert.MustGenerate(nil, cert.Authority(true), cert.KeyUsage(x509.KeyUsageCertSign))
 	certificate := ParseCertificate(ct)
