@@ -8,6 +8,7 @@ import (
 	. "github.com/xtls/xray-core/infra/conf"
 	"github.com/xtls/xray-core/transport/internet"
 	finalmaskcustom "github.com/xtls/xray-core/transport/internet/finalmask/header/custom"
+	"github.com/xtls/xray-core/transport/internet/tls"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -157,6 +158,22 @@ func TestSocketConfig(t *testing.T) {
 	if expectedOutput.ParseTFOValue() != -1 {
 		t.Fatalf("unexpected parsed TFO value, which should be -1")
 	}
+}
+
+func TestTLSConfigAllowInsecureBuild(t *testing.T) {
+	parser := loadJSON(func() Buildable { return new(TLSConfig) })
+
+	runMultiTestCase(t, []TestCase{
+		{
+			Input: `{
+				"allowInsecure": true
+			}`,
+			Parser: parser,
+			Output: &tls.Config{
+				AllowInsecure: true,
+			},
+		},
+	})
 }
 
 func TestHeaderCustomUDPBuild(t *testing.T) {

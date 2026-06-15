@@ -38,7 +38,8 @@ message Certificate {
 }
 
 message Config {
-  // Number 1 was assigned and used by an legacy option.
+  // Whether or not to allow self-signed certificates.
+  bool allow_insecure = 1;
 
   // List of certificates to be served on server.
   repeated Certificate certificate = 2;
